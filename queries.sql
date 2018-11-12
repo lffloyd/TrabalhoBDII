@@ -54,6 +54,7 @@ select * from all_fk_and_related_tabs_cols;
 
 
 select * from user_constraints;
+select * from user_tables;
 select * from all_tab_columns where owner = USER;
 select * from all_cons_columns where owner = USER;
 
