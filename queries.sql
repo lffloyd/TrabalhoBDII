@@ -6,8 +6,9 @@ PARTE 1: ITEM 1
 -------------------------------------------------
 -----------------------------------------------*/
 
-/*O select abaixo é o resultado requerido na questão 1. Mostra todos os índices sobre tabelas do usuário existentes no bd,
-além de indicar sob quais tabelas e colunas das mesmas estes índices estão atuando.*/
+/*O select abaixo é o resultado requerido na questão 1. Mostra todos os índices 
+sobre tabelas do usuário existentes no bd, além de indicar sob quais tabelas e
+colunas das mesmas estes índices estão atuando.*/
 select INDEX_NAME, TABLE_NAME, COLUMN_NAME from ALL_IND_COLUMNS where INDEX_OWNER = user;
 
 /*-----------------------------------------------
@@ -62,8 +63,9 @@ primary_keys.ref_tab, primary_keys.ref_col, all_scheme_fk_cons.cons_type
 from all_scheme_fk_cons join primary_keys on all_scheme_fk_cons.references_pk = primary_keys.cons_name
 order by tab_name;
 
-/*O select abaixo é o resultado requerido an questão 3. Exibirá todas as foreign keys existentes no banco de dados, as tabelas e colunas 
-em que essas foreign keys existem, assim como as tabelas e colunas originais que essas chaves referenciam.*/
+/*O select abaixo é o resultado requerido an questão 3. Exibirá todas as foreign keys existentes no banco de dados,
+as tabelas e colunas  em que essas foreign keys existem, assim como as tabelas e colunas originais que essas chaves
+referenciam.*/
 select * from all_fk_and_related_tabs_cols;
 
 select * from user_constraints;
@@ -77,7 +79,9 @@ PARTE 1: ITEM 4
 -------------------------------------------------
 -----------------------------------------------*/
 
-/*------------------------Funções e procedures para criação dos comandos 'create table' das tabelas do banco Chinook.---------------------------*/
+/*----------------------------
+Funções e procedures para criação dos comandos 'create table' das tabelas do banco Chinook
+.---------------------------*/
 
 /*Cria as tabelas do bd Chinook, constando apenas de colunas, tipos, possibilidade de nulidade, chaves primárias, dentre
 outras informações básicas.*/
@@ -86,8 +90,6 @@ create or replace function criar_tabelas return varchar2 is
     codigo varchar2(32767) := '';
     htab varchar2(10) := '    ';
     nome_cons varchar2(30) := '';
-    tam number := 0;
-    cont number := 0;
 begin
     for c1_rec in c1 loop
         codigo := (codigo || chr(10) || 'CREATE TABLE ' || c1_rec.table_name || ' (' || chr(10));
