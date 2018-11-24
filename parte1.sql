@@ -13,6 +13,20 @@ select INDEX_NAME, TABLE_NAME, COLUMN_NAME from ALL_IND_COLUMNS where INDEX_OWNE
 
 /*-----------------------------------------------
 -------------------------------------------------
+PARTE 1: ITEM 2
+-------------------------------------------------
+-----------------------------------------------*/
+create or replace procedure remove_index(tabela_nome ALL_IND_COLUMNS.TABLE_NAME%TYPE)
+is
+cursor c1 is select INDEX_NAME from ALL_IND_COLUMNS where INDEX_OWNER = user and TABLE_NAME = tabela_nome;
+BEGIN
+    FOR c1_rec IN c1 LOOP
+        EXECUTE IMMEDIATE 'ALTER TABLE ' || tabela_nome || ' DROP CONSTRAINT ' || c1_rec.INDEX_NAME;
+    END LOOP;
+END;
+
+/*-----------------------------------------------
+-------------------------------------------------
 PARTE 1: ITEM 3
 -------------------------------------------------
 -----------------------------------------------*/
