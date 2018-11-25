@@ -24,9 +24,9 @@ BEGIN
     FOR c1_rec IN c1 LOOP
         select count(CONSTRAINT_NAME) INTO total from ALL_CONSTRAINTS where OWNER = 'CHINOOK' AND CONSTRAINT_NAME = c1_rec.INDEX_NAME;
         IF(total > 0) THEN
-        EXECUTE IMMEDIATE 'ALTER TABLE ' || tabela_nome || ' DROP CONSTRAINT ' || c1_rec.INDEX_NAME;
+        EXECUTE IMMEDIATE 'ALTER TABLE ' || tabela_nome || ' DROP CONSTRAINT ' || c1_rec.INDEX_NAME || ' CASCADE';
         ELSE
-        EXECUTE IMMEDIATE 'ALTER TABLE ' || tabela_nome || ' DROP INDEX ' || c1_rec.INDEX_NAME;
+        EXECUTE IMMEDIATE 'ALTER TABLE ' || tabela_nome || ' DROP INDEX ' || c1_rec.INDEX_NAME || ' CASCADE';
         END IF;
     END LOOP;
 END;
