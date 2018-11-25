@@ -18,12 +18,23 @@ PARTE 1: ITEM 2
 -----------------------------------------------*/
 create or replace procedure remove_index(tabela_nome ALL_IND_COLUMNS.TABLE_NAME%TYPE)
 is
-cursor c1 is select INDEX_NAME from ALL_IND_COLUMNS where INDEX_OWNER = user and TABLE_NAME = tabela_nome;
+cursor c1 is select distinct INDEX_NAME from ALL_IND_COLUMNS where INDEX_OWNER = user and TABLE_NAME = tabela_nome;
+total int;
 BEGIN
     FOR c1_rec IN c1 LOOP
+        select count(CONSTRAINT_NAME) INTO total from ALL_CONSTRAINTS where OWNER = 'CHINOOK' AND CONSTRAINT_NAME = c1_rec.INDEX_NAME;
+        IF(total > 0) THEN
         EXECUTE IMMEDIATE 'ALTER TABLE ' || tabela_nome || ' DROP CONSTRAINT ' || c1_rec.INDEX_NAME;
+        ELSE
+        EXECUTE IMMEDIATE 'ALTER TABLE ' || tabela_nome || ' DROP INDEX ' || c1_rec.INDEX_NAME;
+        END IF;
     END LOOP;
 END;
+
+/*Procedure que recebe como parâmetro o nome de uma tabela a ter todos os seus índices removidos. No Oracle, toda chave primária 
+é criada junto com um indice que recebe o mesmo nome que ela e uma constraint. Se o indice a ser removido for desse tipo, precisamos
+dar DROP na constraint dele, se o indice for relacionado a outra coluna que não seja chave primária, damos DROP no indice direto.
+*/
 
 /*-----------------------------------------------
 -------------------------------------------------
