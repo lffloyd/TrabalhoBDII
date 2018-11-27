@@ -76,7 +76,7 @@ is
 total int;
 BEGIN
 select count(*) into total from PLAYLIST where PLAYLISTID = playlist_id;
-IF (total>50) THEN
+IF (total>=50) THEN
     raise_application_error(-23, 'Playlists can contain a maximum of 50 tracks.');
 ELSE
 insert into PLAYLISTTRACK(PLAYLISTID,TRACKID) values (playlist_id, track_id);
