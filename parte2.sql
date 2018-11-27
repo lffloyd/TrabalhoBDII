@@ -60,21 +60,30 @@ delete from Track where trackid > 3503;
 deve utilizar para poder adicionar TRACKS as suas PLAYLISTS. Ele não possui acesso à nenhuma informação das tabelas, apenas pode
 adicionar TRACKS novas utilizando a stored procedure que recebe como parâmetros o ID da PLAYLIST e o ID da TRACK. Caso o nº de TRACKS
 numa playlist tenha atingido o limite de 50, a stored procedure levanta um erro 
-avisando ao usuário sobre o limite de 50 TRCKS por PLAYLIST.*/
+avisando ao usuário sobre o limite de 50 TRCKS por PLAYLIST. Para fazer esta parte é necssário fazer login com o user SYSTEM, 
+criar o novo usuário, compilar a stored procedure e dar acesso ao usuário à essa stored procedure. Após fazer isso deve-se 
+desconectar do BD atual e reconectar com o novo user criado (newUser) e ele poderá adicionar TRACKS novas executando a procedure,
+informando o ID da TRACK e da PLAYLIST ao qual ele pretende associar.*/
 
 CREATE USER newUser
 IDENTIFIED BY 1234;
+
 GRANT CONNECT TO newUser;
-GRANT EXECUTE ON insert_track_on_playlist TO newUser;
+GRANT EXECUTE ON SYSTEM.insert_track_on_playlist TO newUser;
 
 create or replace procedure insert_track_on_playlist(playlist_id int, track_id int)
 is
 total int;
 BEGIN
 select count(*) into total from PLAYLIST where PLAYLISTID = playlist_id;
-IF (total>=50) THEN
+IF (total>50) THEN
     raise_application_error(-23, 'Playlists can contain a maximum of 50 tracks.');
 ELSE
 insert into PLAYLISTTRACK(PLAYLISTID,TRACKID) values (playlist_id, track_id);
 END IF;
+END;
+
+/*Teste da procedure*/
+BEGIN
+SYSTEM.insert_track_on_playlist(1,1);
 END;
